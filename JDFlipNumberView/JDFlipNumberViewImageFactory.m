@@ -110,17 +110,11 @@ static JDFlipNumberViewImageFactory *sharedInstance;
 	// create bottom and top images
     for (NSInteger j=0; j<10; j++) {
         for (int i=0; i<2; i++) {
-            NSString *imageName = [NSString stringWithFormat: @"%d.png", j];
-            NSString *bundleImageName = [NSString stringWithFormat: @"%@.bundle/%@", bundleName, imageName];
-            NSString *path = [[NSBundle mainBundle] pathForResource:bundleImageName ofType:nil];
+            NSString *imageName = [NSString stringWithFormat: @"vs_timer_num_%d.png", j];
+			UIImage *sourceImage = [UIImage imageFromResource:imageName];
             
-            NSAssert(path != nil, @"Bundle named '%@' not found!", bundleName);
-            
-			UIImage *sourceImage = [[UIImage alloc] initWithContentsOfFile:path];
 			CGSize size		= CGSizeMake(sourceImage.size.width, sourceImage.size.height/2);
 			CGFloat yPoint	= (i==0) ? 0 : -size.height;
-			
-            NSAssert(sourceImage != nil, @"Did not find image %@.png in bundle %@.bundle", imageName, bundleName);
             
             // draw half of image and create new image
 			UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
