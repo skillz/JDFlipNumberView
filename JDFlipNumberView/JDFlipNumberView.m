@@ -39,7 +39,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
 
 - (id)initWithFrame:(CGRect)frame
 {
-    self = [super initWithFrame:CGRectZero];
+    self = [super initWithFrame:frame];
     if (self)
 	{
         [self setupWithDigitCount:1];
@@ -93,7 +93,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
     self.maximumValue = pow(10, digitCount)-1;
     self.targetMode = NO;
     
-    super.frame = CGRectMake(0, 0, digitCount*view.frame.size.width, view.frame.size.height);
+    super.frame = (CGRect){self.frame.origin, digitCount*view.frame.size.width, view.frame.size.height};
 }
 
 
