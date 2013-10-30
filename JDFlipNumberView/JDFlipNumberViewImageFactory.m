@@ -110,7 +110,7 @@ static JDFlipNumberViewImageFactory *sharedInstance;
 	// create bottom and top images
     for (NSInteger j=0; j<10; j++) {
         for (int i=0; i<2; i++) {
-            NSString *imageName = [NSString stringWithFormat: @"vs_timer_num_%d.png", j];
+            NSString *imageName = [NSString stringWithFormat: @"vs_timer_num_%d", j];
 			UIImage *sourceImage = [UIImage imageFromResource:imageName];
             
 			CGSize size		= CGSizeMake(sourceImage.size.width, sourceImage.size.height/2);

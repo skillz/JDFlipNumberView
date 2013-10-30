@@ -12,7 +12,7 @@
 
 static CGFloat JDFlipAnimationMinimumTimeInterval = 0.01; // = 100 fps
 static CGFloat JDFlipViewRelativeMargin = 0.15; // use 15% of width as margin
-
+static CGFloat JDFlipViewDigitSpace = 3.5; //in px
 
 typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
 	JDFlipAnimationDirectionUp,
@@ -37,39 +37,63 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
 
 @implementation JDFlipNumberView
 
-- (id)init;
-{
-	return [self initWithDigitCount:1];
-}
-
-- (id)initWithDigitCount:(NSUInteger)digitCount;
+- (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:CGRectZero];
     if (self)
 	{
-		self.backgroundColor = [UIColor clearColor];
-        self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
-        self.autoresizesSubviews = NO;
-        _digitCount = digitCount;
-        
-        // init single digit views
-		JDFlipNumberDigitView* view = nil;
-		NSMutableArray* allViews = [[NSMutableArray alloc] initWithCapacity:digitCount];
-		for (int i = 0; i < digitCount; i++) {
-			view = [[JDFlipNumberDigitView alloc] init];
-			view.frame = CGRectMake(i*view.frame.size.width, 0, view.frame.size.width, view.frame.size.height);
-			[self addSubview: view];
-			[allViews addObject: view];
-		}
-		self.digitViews = [[NSArray alloc] initWithArray: allViews];
-        
-        // setup properties
-        self.animationType = JDFlipAnimationTypeTopDown;
-        self.maximumValue = pow(10, digitCount)-1;
-        self.targetMode = NO;
-		super.frame = CGRectMake(0, 0, digitCount*view.frame.size.width, view.frame.size.height);
+        [self setupWithDigitCount:1];
     }
     return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self)
+	{
+        [self setupWithDigitCount:3];
+    }
+    return self;
+    
+}
+
+- (id)initWithDigitCount:(NSUInteger)digitCount
+{
+    self = [super initWithFrame:CGRectZero];
+    if (self)
+	{
+        [self setupWithDigitCount:digitCount];
+    }
+    return self;
+}
+
+- (void)setupWithDigitCount:(NSUInteger)digitCount;
+{
+    
+    self.backgroundColor = [UIColor clearColor];
+    self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
+    self.autoresizesSubviews = NO;
+    _digitCount = digitCount;
+    
+    // init single digit views
+    JDFlipNumberDigitView* view = nil;
+    NSMutableArray* allViews = [[NSMutableArray alloc] initWithCapacity:digitCount];
+    for (int i = 0; i < digitCount; i++) {
+        view = [[JDFlipNumberDigitView alloc] init];
+        view.frame = CGRectMake(i*view.frame.size.width + (JDFlipViewDigitSpace * i) + 1, 0, view.frame.size.width, view.frame.size.height);
+        [self addSubview: view];
+        [allViews addObject: view];
+    }
+    self.digitViews = [[NSArray alloc] initWithArray: allViews];
+    
+    // setup properties
+    self.animationType = JDFlipAnimationTypeTopDown;
+    self.maximumValue = pow(10, digitCount)-1;
+    self.targetMode = NO;
+    
+    super.frame = CGRectMake(0, 0, digitCount*view.frame.size.width, view.frame.size.height);
 }
 
 
@@ -278,10 +302,13 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
             (self.animationType == JDFlipAnimationTypeTopDown && newValue > self.targetValue) ||
             (self.animationType == JDFlipAnimationTypeBottomUp && newValue < self.targetValue)) {
             [self setValue:self.targetValue animatedInCurrentDirection:YES];
+            
             if (self.completionBlock != nil) {
-                self.completionBlock(YES);
+                JDFlipAnimationCompletionBlock block = self.completionBlock;
                 self.completionBlock = nil;
+                block(YES);
             }
+            
             [self stopAnimation];
             return;
         }
@@ -314,7 +341,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
 	NSString* strvalue = [NSString stringWithFormat: @"%50d", newValue];
 	strvalue = [strvalue substringWithRange:NSMakeRange(strvalue.length-self.digitViews.count, self.digitViews.count)];
 	self.targetValue = [self validValueFromValue:[strvalue intValue]];
-
+    
     if (self.targetValue == self.value) {
         return;
     }
@@ -340,15 +367,16 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
 
 - (void)stopAnimation;
 {
-    if (self.targetMode && self.completionBlock != nil) {
-        self.completionBlock(NO);
-    }
-    
-	self.targetMode = NO;
     [self.animationTimer invalidate];
     self.animationTimer = nil;
     self.intervalRest = 0;
-    self.completionBlock = nil;
+    
+    if (self.targetMode && self.completionBlock != nil) {
+        self.targetMode = NO;
+        JDFlipAnimationCompletionBlock block = self.completionBlock;
+        self.completionBlock = nil;
+        block(YES);
+    }
 }
 
 #pragma mark -
