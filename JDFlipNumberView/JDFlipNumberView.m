@@ -377,7 +377,8 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
         self.targetMode = NO;
         JDFlipAnimationCompletionBlock block = self.completionBlock;
         self.completionBlock = nil;
-        block(YES);
+        
+        block(self.value == self.targetValue);
     }
 }
 
