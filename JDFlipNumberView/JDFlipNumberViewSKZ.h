@@ -11,7 +11,7 @@
 
 typedef void(^JDFlipAnimationCompletionBlock)(BOOL finished);
 
-@interface JDFlipNumberView : UIView
+@interface JDFlipNumberViewSKZ : UIView
 
 @property (nonatomic, weak) id<JDFlipNumberViewDelegate> delegate;
 
@@ -53,8 +53,8 @@ typedef void(^JDFlipAnimationCompletionBlock)(BOOL finished);
 
 @protocol JDFlipNumberViewDelegate <NSObject>
 @optional
-- (void)flipNumberView:(JDFlipNumberView*)flipNumberView willChangeToValue:(NSUInteger)newValue;
-- (void)flipNumberView:(JDFlipNumberView*)flipNumberView didChangeValueAnimated:(BOOL)animated;
+- (void)flipNumberView:(JDFlipNumberViewSKZ*)flipNumberView willChangeToValue:(NSUInteger)newValue;
+- (void)flipNumberView:(JDFlipNumberViewSKZ*)flipNumberView didChangeValueAnimated:(BOOL)animated;
 @end;
 
 

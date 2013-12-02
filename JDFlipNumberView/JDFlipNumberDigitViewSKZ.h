@@ -17,7 +17,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationType) {
 typedef void(^JDDigitAnimationCompletionBlock)(BOOL finished);
 
 
-@interface JDFlipNumberDigitView : UIView
+@interface JDFlipNumberDigitViewSKZ : UIView
 
 @property (nonatomic, assign) NSUInteger value;
 @property (nonatomic, assign) CGFloat animationDuration;

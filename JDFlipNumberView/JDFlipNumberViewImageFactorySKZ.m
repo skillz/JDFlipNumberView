@@ -6,20 +6,20 @@
 //  Copyright (c) 2012 markusemrich. All rights reserved.
 //
 
-#import "JDFlipNumberViewImageFactory.h"
+#import "JDFlipNumberViewImageFactorySKZ.h"
 
-static JDFlipNumberViewImageFactory *sharedInstance;
+static JDFlipNumberViewImageFactorySKZ *sharedInstance;
 
-@interface JDFlipNumberViewImageFactory ()
+@interface JDFlipNumberViewImageFactorySKZ ()
 @property (nonatomic, strong) NSArray *topImages;
 @property (nonatomic, strong) NSArray *bottomImages;
 @property (nonatomic, strong) NSString *imageBundle;
 - (void)setup;
 @end
 
-@implementation JDFlipNumberViewImageFactory
+@implementation JDFlipNumberViewImageFactorySKZ
 
-+ (JDFlipNumberViewImageFactory*)sharedInstance;
++ (JDFlipNumberViewImageFactorySKZ*)sharedInstance;
 {
     if (sharedInstance != nil) {
         return sharedInstance;
