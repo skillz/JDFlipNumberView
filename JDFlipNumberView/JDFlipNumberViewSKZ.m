@@ -78,10 +78,10 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
     _digitCount = digitCount;
     
     // init single digit views
-    JDFlipNumberDigitView* view = nil;
+    JDFlipNumberDigitViewSKZ* view = nil;
     NSMutableArray* allViews = [[NSMutableArray alloc] initWithCapacity:digitCount];
     for (int i = 0; i < digitCount; i++) {
-        view = [[JDFlipNumberDigitView alloc] init];
+        view = [[JDFlipNumberDigitViewSKZ alloc] init];
         view.frame = CGRectMake(i*view.frame.size.width + (JDFlipViewDigitSpace * i) + 1, 0, view.frame.size.width, view.frame.size.height);
         [self addSubview: view];
         [allViews addObject: view];
