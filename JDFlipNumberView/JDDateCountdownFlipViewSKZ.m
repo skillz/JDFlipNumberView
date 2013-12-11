@@ -5,23 +5,23 @@
 //  Copyright 2011 Markus Emrich. All rights reserved.
 //
 
-#import "JDDateCountdownFlipView.h"
+#import "JDDateCountdownFlipViewSKZ.h"
 
 static CGFloat kFlipAnimationUpdateInterval = 0.5; // = 2 times per second
 
-@interface JDDateCountdownFlipView ()
+@interface JDDateCountdownFlipViewSKZ ()
 @property (nonatomic) NSInteger dayDigitCount;
-@property (nonatomic, strong) JDFlipNumberView* dayFlipNumberView;
-@property (nonatomic, strong) JDFlipNumberView* hourFlipNumberView;
-@property (nonatomic, strong) JDFlipNumberView* minuteFlipNumberView;
-@property (nonatomic, strong) JDFlipNumberView* secondFlipNumberView;
+@property (nonatomic, strong) JDFlipNumberViewSKZ* dayFlipNumberView;
+@property (nonatomic, strong) JDFlipNumberViewSKZ* hourFlipNumberView;
+@property (nonatomic, strong) JDFlipNumberViewSKZ* minuteFlipNumberView;
+@property (nonatomic, strong) JDFlipNumberViewSKZ* secondFlipNumberView;
 
 @property (nonatomic, strong) NSTimer *animationTimer;
 - (void)setupUpdateTimer;
 - (void)handleTimer:(NSTimer*)timer;
 @end
 
-@implementation JDDateCountdownFlipView
+@implementation JDDateCountdownFlipViewSKZ
 
 - (id)init
 {
@@ -48,10 +48,10 @@ static CGFloat kFlipAnimationUpdateInterval = 0.5; // = 2 times per second
         self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
 		
         // setup flipviews
-        self.dayFlipNumberView = [[JDFlipNumberView alloc] initWithDigitCount:_dayDigitCount];
-        self.hourFlipNumberView = [[JDFlipNumberView alloc] initWithDigitCount:2];
-        self.minuteFlipNumberView = [[JDFlipNumberView alloc] initWithDigitCount:2];
-        self.secondFlipNumberView = [[JDFlipNumberView alloc] initWithDigitCount:2];
+        self.dayFlipNumberView = [[JDFlipNumberViewSKZ alloc] initWithDigitCount:_dayDigitCount];
+        self.hourFlipNumberView = [[JDFlipNumberViewSKZ alloc] initWithDigitCount:2];
+        self.minuteFlipNumberView = [[JDFlipNumberViewSKZ alloc] initWithDigitCount:2];
+        self.secondFlipNumberView = [[JDFlipNumberViewSKZ alloc] initWithDigitCount:2];
         
         // set maximum values
         self.hourFlipNumberView.maximumValue = 23;
@@ -71,7 +71,7 @@ static CGFloat kFlipAnimationUpdateInterval = 0.5; // = 2 times per second
         self.frame = CGRectMake(0, 0, frame.size.width*(dayDigits+7), frame.size.height);
         
         // add subviews
-        for (JDFlipNumberView* view in @[self.dayFlipNumberView, self.hourFlipNumberView, self.minuteFlipNumberView, self.secondFlipNumberView]) {
+        for (JDFlipNumberViewSKZ* view in @[self.dayFlipNumberView, self.hourFlipNumberView, self.minuteFlipNumberView, self.secondFlipNumberView]) {
             [self addSubview:view];
         }
         
@@ -86,7 +86,7 @@ static CGFloat kFlipAnimationUpdateInterval = 0.5; // = 2 times per second
 
 - (void)setZDistance:(NSUInteger)zDistance;
 {
-    for (JDFlipNumberView* view in @[self.dayFlipNumberView, self.hourFlipNumberView, self.minuteFlipNumberView, self.secondFlipNumberView]) {
+    for (JDFlipNumberViewSKZ* view in @[self.dayFlipNumberView, self.hourFlipNumberView, self.minuteFlipNumberView, self.secondFlipNumberView]) {
         [view setZDistance:zDistance];
     }
 }
@@ -107,7 +107,7 @@ static CGFloat kFlipAnimationUpdateInterval = 0.5; // = 2 times per second
     currentX += self.dayFlipNumberView.frame.size.width;
     
     // update flipview frames
-    for (JDFlipNumberView* view in @[self.hourFlipNumberView, self.minuteFlipNumberView, self.secondFlipNumberView]) {
+    for (JDFlipNumberViewSKZ* view in @[self.hourFlipNumberView, self.minuteFlipNumberView, self.secondFlipNumberView]) {
         currentX   += margin;
         view.frame = CGRectMake(currentX, 0, digitWidth*2, frame.size.height);
         currentX   += view.frame.size.width;

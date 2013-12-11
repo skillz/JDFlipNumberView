@@ -10,9 +10,9 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
-#import "JDFlipNumberViewImageFactory.h"
+#import "JDFlipNumberViewImageFactorySKZ.h"
 
-#import "JDFlipNumberDigitView.h"
+#import "JDFlipNumberDigitViewSKZ.h"
 
 static NSString* kFlipAnimationKey = @"kFlipAnimationKey";
 static CGFloat kFlipAnimationMinimumAnimationDuration = 0.05;
@@ -24,7 +24,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
 };
 
 
-@interface JDFlipNumberDigitView ()
+@interface JDFlipNumberDigitViewSKZ ()
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UIImageView *flipImageView;
 @property (nonatomic, strong) UIImageView *bottomImageView;
@@ -40,7 +40,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
 @end
 
 
-@implementation JDFlipNumberDigitView
+@implementation JDFlipNumberDigitViewSKZ
 
 - (id)initWithFrame:(CGRect)frame;
 {
@@ -75,9 +75,9 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
 - (void)initImagesAndFrames;
 {
 	// setup image views
-	self.topImageView	 = [[UIImageView alloc] initWithImage: JD_IMG_FACTORY.topImages[0]];
-	self.flipImageView	 = [[UIImageView alloc] initWithImage: JD_IMG_FACTORY.topImages[0]];
-	self.bottomImageView = [[UIImageView alloc] initWithImage: JD_IMG_FACTORY.bottomImages[0]];
+	self.topImageView	 = [[UIImageView alloc] initWithImage: [JDFlipNumberViewImageFactorySKZ sharedInstance].topImages[0]];
+	self.flipImageView	 = [[UIImageView alloc] initWithImage: [JDFlipNumberViewImageFactorySKZ sharedInstance].topImages[0]];
+	self.bottomImageView = [[UIImageView alloc] initWithImage: [JDFlipNumberViewImageFactorySKZ sharedInstance].bottomImages[0]];
     self.flipImageView.hidden = YES;
     
     // set z positions
@@ -91,17 +91,17 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
 	[self addSubview:self.flipImageView];
 	
 	// setup default 3d transform
-	[self setZDistance: (JD_IMG_FACTORY.imageSize.height*2)*3];
+	[self setZDistance: ([JDFlipNumberViewImageFactorySKZ sharedInstance].imageSize.height*2)*3];
     
     // setup frames
-    CGSize size = JD_IMG_FACTORY.imageSize;
+    CGSize size = [JDFlipNumberViewImageFactorySKZ sharedInstance].imageSize;
 	self.bottomImageView.frame = CGRectMake(0, size.height, size.width, size.height);
     super.frame = CGRectMake(0, 0, size.width, size.height*2);
 }
 
 - (CGSize)sizeThatFits:(CGSize)aSize;
 {
-    CGSize imageSize = JD_IMG_FACTORY.imageSize;
+    CGSize imageSize = [JDFlipNumberViewImageFactorySKZ sharedInstance].imageSize;
     
     CGFloat ratioW     = aSize.width/aSize.height;
     CGFloat origRatioW = imageSize.width/(imageSize.height*2);
@@ -128,8 +128,8 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
 - (void)setFrame:(CGRect)rect allowUpscaling:(BOOL)upscalingAllowed;
 {
     if (!upscalingAllowed) {
-        rect.size.width  = MIN(rect.size.width, JD_IMG_FACTORY.imageSize.width);
-        rect.size.height = MIN(rect.size.height, JD_IMG_FACTORY.imageSize.height*2);
+        rect.size.width  = MIN(rect.size.width, [JDFlipNumberViewImageFactorySKZ sharedInstance].imageSize.width);
+        rect.size.height = MIN(rect.size.height, [JDFlipNumberViewImageFactorySKZ sharedInstance].imageSize.height*2);
     }
     
     rect.size = [self sizeThatFits: rect.size];
@@ -190,9 +190,9 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
 {
     if (!animated || self.animationDuration < kFlipAnimationMinimumAnimationDuration) {
         // show new value
-        self.topImageView.image	   = JD_IMG_FACTORY.topImages[self.value];
-        self.flipImageView.image   = JD_IMG_FACTORY.topImages[self.value];
-        self.bottomImageView.image = JD_IMG_FACTORY.bottomImages[self.value];
+        self.topImageView.image	   = [JDFlipNumberViewImageFactorySKZ sharedInstance].topImages[self.value];
+        self.flipImageView.image   = [JDFlipNumberViewImageFactorySKZ sharedInstance].topImages[self.value];
+        self.bottomImageView.image = [JDFlipNumberViewImageFactorySKZ sharedInstance].bottomImages[self.value];
         
         // reset state
         self.flipImageView.hidden = YES;
@@ -227,9 +227,9 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
         [self.flipImageView.layer removeAllAnimations];
         
 		// setup first animation half
-        self.topImageView.image	   = JD_IMG_FACTORY.topImages[isTopDown ? self.value : self.previousValue];
-        self.flipImageView.image   = isTopDown ? JD_IMG_FACTORY.topImages[self.previousValue] : JD_IMG_FACTORY.bottomImages[self.previousValue];
-        self.bottomImageView.image = JD_IMG_FACTORY.bottomImages[isTopDown ? self.previousValue : self.value];
+        self.topImageView.image	   = [JDFlipNumberViewImageFactorySKZ sharedInstance].topImages[isTopDown ? self.value : self.previousValue];
+        self.flipImageView.image   = isTopDown ? [JDFlipNumberViewImageFactorySKZ sharedInstance].topImages[self.previousValue] : [JDFlipNumberViewImageFactorySKZ sharedInstance].bottomImages[self.previousValue];
+        self.bottomImageView.image = [JDFlipNumberViewImageFactorySKZ sharedInstance].bottomImages[isTopDown ? self.previousValue : self.value];
 		
         animation.fromValue	= [NSValue valueWithCATransform3D:CATransform3DMakeRotation(0.0, 1, 0, 0)];
         animation.toValue   = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(isTopDown ? -M_PI_2 : M_PI_2, 1, 0, 0)];
@@ -237,9 +237,9 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
 	} else {
 		// setup second animation half
         if (isTopDown) {
-            self.flipImageView.image = JD_IMG_FACTORY.bottomImages[self.value];
+            self.flipImageView.image = [JDFlipNumberViewImageFactorySKZ sharedInstance].bottomImages[self.value];
         } else {
-            self.flipImageView.image = JD_IMG_FACTORY.topImages[self.value];
+            self.flipImageView.image = [JDFlipNumberViewImageFactorySKZ sharedInstance].topImages[self.value];
         }
         
 		animation.fromValue	= [NSValue valueWithCATransform3D:CATransform3DMakeRotation(isTopDown ? M_PI_2 : -M_PI_2, 1, 0, 0)];
@@ -274,9 +274,9 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationState) {
 		
 		// update images
         if(self.animationType == JDFlipAnimationTypeTopDown) {
-            self.bottomImageView.image = JD_IMG_FACTORY.bottomImages[self.value];
+            self.bottomImageView.image = [JDFlipNumberViewImageFactorySKZ sharedInstance].bottomImages[self.value];
         } else {
-            self.topImageView.image = JD_IMG_FACTORY.topImages[self.value];
+            self.topImageView.image = [JDFlipNumberViewImageFactorySKZ sharedInstance].topImages[self.value];
         }
 		
 		// remove old animation
