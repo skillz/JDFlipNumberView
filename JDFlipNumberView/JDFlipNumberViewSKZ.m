@@ -104,7 +104,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
 {
 	NSMutableString* stringValue = [NSMutableString stringWithCapacity:self.digitViews.count];
 	for (JDFlipNumberDigitViewSKZ* view in self.digitViews) {
-		[stringValue appendFormat: @"%d", view.value];
+		[stringValue appendFormat: @"%lu", (unsigned long)view.value];
 	}
 	
 	return [stringValue intValue];
@@ -144,7 +144,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
 	}
     
     // convert to string
-	NSString* stringValue = [NSString stringWithFormat: @"%50d", newValue];
+	NSString* stringValue = [NSString stringWithFormat: @"%50ld", (long)newValue];
 	
     // udpate all flipviews, that have changed
     __block NSUInteger completedDigits = 0;
@@ -340,7 +340,7 @@ typedef NS_OPTIONS(NSUInteger, JDFlipAnimationDirection) {
     }
     
 	// save target value in valid range
-	NSString* strvalue = [NSString stringWithFormat: @"%50d", newValue];
+	NSString* strvalue = [NSString stringWithFormat: @"%50ld", (long)newValue];
 	strvalue = [strvalue substringWithRange:NSMakeRange(strvalue.length-self.digitViews.count, self.digitViews.count)];
 	self.targetValue = [self validValueFromValue:[strvalue intValue]];
     
