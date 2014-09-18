@@ -64,7 +64,7 @@ static CGFloat kFlipAnimationUpdateInterval = 0.5; // = 2 times per second
         self.minuteFlipNumberView.reverseFlippingDisabled = YES;
         self.secondFlipNumberView.reverseFlippingDisabled = YES;
 
-        [self setZDistance: 60];
+        [self setZDistance:60];
         
         // set inital frame
         CGRect frame = self.hourFlipNumberView.frame;
