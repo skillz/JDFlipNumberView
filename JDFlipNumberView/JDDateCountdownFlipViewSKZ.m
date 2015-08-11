@@ -165,9 +165,12 @@ static CGFloat kFlipAnimationUpdateInterval = 0.5; // = 2 times per second
     }
     
     if ([self.targetDate timeIntervalSinceDate:[NSDate date]] > 0) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         NSUInteger flags = NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit;
         NSDateComponents* dateComponents = [[NSCalendar currentCalendar] components:flags fromDate:[NSDate date] toDate:self.targetDate options:0];
-        
+#pragma clang diagnostic pop
+
         [self.dayFlipNumberView setValue:[dateComponents day] animated:animated];
         [self.hourFlipNumberView setValue:[dateComponents hour] animated:animated];
         [self.minuteFlipNumberView setValue:[dateComponents minute] animated:animated];
